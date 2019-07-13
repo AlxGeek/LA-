@@ -13,6 +13,7 @@ private:
     size_t n;
 
 public:
+    Vec();
     Vec(size_t n);
     Vec(size_t n, double value);
     Vec(size_t n, double *value);

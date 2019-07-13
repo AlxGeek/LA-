@@ -13,6 +13,7 @@ private:
     size_t cols;
 
 public:
+    Mat();
     Mat(size_t n);
     Mat(size_t rows, size_t cols);
     Mat(size_t rows, size_t cols, double value);

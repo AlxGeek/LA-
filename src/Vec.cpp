@@ -1,5 +1,9 @@
 #include "Vec.hpp"
 
+Vec::Vec() : n(0), data(nullptr)
+{
+}
+
 Vec::Vec(size_t n) : n(n)
 {
     data = new double[n];

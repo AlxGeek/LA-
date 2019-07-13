@@ -1,5 +1,9 @@
 #include "Mat.hpp"
 
+Mat::Mat() : rows(0), cols(0), data(nullptr)
+{
+}
+
 Mat::Mat(size_t n) : Mat(n, n)
 {
 }
@@ -98,8 +102,8 @@ Mat Mat::operator*(const Mat &mat) const
     return res;
 }
 
-
-Mat Mat::getRandom(size_t rows, size_t cols, int maxValue){
+Mat Mat::getRandom(size_t rows, size_t cols, int maxValue)
+{
     Mat mat(rows, cols);
     mat.fillRandom(maxValue);
     return mat;
@@ -111,7 +115,6 @@ Mat Mat::getIdentity(size_t n)
     mat.setDiagonal(1);
     return mat;
 }
-
 
 std::ostream &operator<<(std::ostream &os, const Mat &mat)
 {

@@ -36,7 +36,7 @@ int main()
               << mat2;
     std::cout << "Mat mult:" << std::endl
               << mat * mat2;
-    Mat L(3, 3, 0), U(3, 3, 0);
+    Mat L, U;
     std::cout << "LU decomposition: " << la::LUDecomposition(mat, L, U) << std::endl;
     std::cout << "Mat:\n"
               << mat;
@@ -46,6 +46,18 @@ int main()
               << U;
     std::cout << "LU:\n"
               << L * U;
+
+    Mat A(2, 2);
+    Vec b(2);
+    Vec x;
+    A[0][0] = 1;
+    A[0][1] = 4;
+    A[1][0] = 3;
+    A[1][1] = 2;
+    b[0] = 3;
+    b[1] = 2;
+    std::cout << "LU solve: " << la::solveLU(A, b, x) << std::endl;
+    std::cout << x;
 
     return 0;
 }
