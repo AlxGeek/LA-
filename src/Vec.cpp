@@ -2,23 +2,25 @@
 
 Vec::Vec(size_t n) : n(n)
 {
-    data = new float[n];
+    data = new double[n];
 }
 
-Vec::Vec(size_t n, float value) : Vec(n)
+Vec::Vec(size_t n, double value) : Vec(n)
 {
     for (size_t i = 0; i < n; i++)
         data[i] = value;
 }
 
-Vec::Vec(size_t n, float *value) : Vec(n)
+Vec::Vec(size_t n, double *value) : Vec(n)
 {
     for (size_t i = 0; i < n; i++)
         data[i] = value[i];
 }
 
-Vec::Vec(const Vec &vec) : Vec(vec.getSize(), vec.getData())
+Vec::Vec(const Vec &vec) : Vec(vec.getSize())
 {
+    for (size_t i = 0; i < n; i++)
+        data[i] = vec[i];
 }
 
 Vec::~Vec()
@@ -31,14 +33,14 @@ size_t Vec::getSize() const
     return n;
 }
 
-float *Vec::getData() const
+double *Vec::getData()
 {
     return data;
 }
 
-float Vec::getNorm()
+double Vec::getNorm()
 {
-    float norm = 0;
+    double norm = 0;
     for (size_t i = 0; i < n; i++)
     {
         norm += data[i] * data[i];
@@ -48,7 +50,7 @@ float Vec::getNorm()
 
 void Vec::normalize()
 {
-    float norm = getNorm();
+    double norm = getNorm();
     for (size_t i = 0; i < n; i++)
         data[i] /= norm;
 }
@@ -62,20 +64,31 @@ void Vec::print(std::ostream &os) const
     os << std::endl;
 }
 
-float Vec::at(const size_t i) const{
-    if(i < 0 || i >= n)
+double &Vec::at(const size_t i)
+{
+    if (i < 0 || i >= n)
         throw std::out_of_range("Out of range");
     return data[i];
 }
 
+const double &Vec::at(const size_t i) const
+{
+    if (i < 0 || i >= n)
+        throw std::out_of_range("Out of range");
+    return data[i];
+}
 
-float Vec::operator[](const size_t i) const
+double &Vec::operator[](const size_t i)
 {
     return data[i];
 }
 
+const double &Vec::operator[](const size_t i) const
+{
+    return data[i];
+}
 
-Vec Vec::operator+(const float &x) const
+Vec Vec::operator+(const double &x) const
 {
     Vec rest(*this);
     for (size_t i = 0; i < rest.n; i++)
@@ -85,9 +98,9 @@ Vec Vec::operator+(const float &x) const
     return rest;
 }
 
-float Vec::operator*(const Vec &vec) const
+double Vec::operator*(const Vec &vec) const
 {
-    float rest = 0;
+    double rest = 0;
     for (size_t i = 0; i < n; i++)
     {
         rest += data[i] * vec.data[i];

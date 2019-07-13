@@ -1,3 +1,6 @@
+#ifndef VEC_HPP
+#define VEC_HPP
+
 #include <cstddef>
 #include <ostream>
 #include <cmath>
@@ -6,32 +9,33 @@
 class Vec
 {
 private:
-    float *data;
+    double *data;
     size_t n;
 
 public:
     Vec(size_t n);
-    Vec(size_t n, float value);
-    Vec(size_t n, float *value);
+    Vec(size_t n, double value);
+    Vec(size_t n, double *value);
     Vec(const Vec &vec);
     ~Vec();
 
-    
-
     size_t getSize() const;
-    float *getData() const;
+    double *getData();
 
-    float getNorm();
+    double getNorm();
     void normalize();
 
     void print(std::ostream &os) const;
 
-    float at(const size_t i) const;
+    double &at(const size_t i);
+    const double &at(const size_t i) const;
 
-    float operator[](const size_t i) const;
-    Vec operator+(const float &x) const;
-    float operator*(const Vec &vec) const;
+    double &operator[](const size_t i);
+    const double &operator[](const size_t i) const;
+    Vec operator+(const double &x) const;
+    double operator*(const Vec &vec) const;
 
-    friend std::ostream& operator<<(std::ostream& os, const Vec& vec);
-
+    friend std::ostream &operator<<(std::ostream &os, const Vec &vec);
 };
+
+#endif //VEC_HPP
