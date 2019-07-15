@@ -7,6 +7,7 @@
 
 int main()
 {
+    //Examples
     srand(time(NULL));
     std::cout << "VECTOR TEST" << std::endl;
     Vec vec(5, 1);
@@ -36,6 +37,10 @@ int main()
               << mat2;
     std::cout << "Mat mult:" << std::endl
               << mat * mat2;
+
+    std::cout << "Transpose:" << std::endl
+              << mat.T();
+
     Mat L, U;
     std::cout << "LU decomposition: " << la::LUDecomposition(mat, L, U) << std::endl;
     std::cout << "Mat:\n"
@@ -58,6 +63,13 @@ int main()
     b[1] = 2;
     std::cout << "LU solve: " << la::solveLU(A, b, x) << std::endl;
     std::cout << x;
+    Mat inv = la::inverse(mat);
+    std::cout << "Mat:" << std::endl
+              << mat;
+    std::cout << "Inverse:" << std::endl
+              << inv;
+    std::cout << "Identity:" << std::endl
+              << mat * inv;
 
     return 0;
 }

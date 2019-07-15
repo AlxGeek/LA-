@@ -4,9 +4,9 @@ Vec::Vec() : n(0), data(nullptr)
 {
 }
 
-Vec::Vec(size_t n) : n(n)
+Vec::Vec(size_t n)
 {
-    data = new double[n];
+    init(n);
 }
 
 Vec::Vec(size_t n, double value) : Vec(n)
@@ -15,10 +15,22 @@ Vec::Vec(size_t n, double value) : Vec(n)
         data[i] = value;
 }
 
-Vec::Vec(size_t n, double *value) : Vec(n)
+Vec::Vec(size_t n, double *value, bool copy)
 {
-    for (size_t i = 0; i < n; i++)
-        data[i] = value[i];
+    if (copy)
+    {
+        init(n);
+        for (size_t i = 0; i < n; i++)
+        {
+            data[i] = value[i];
+        }
+    }
+    else
+    {
+        this->n = n;
+        data = value;
+        persistentMemory = true;
+    }
 }
 
 Vec::Vec(const Vec &vec) : Vec(vec.getSize())
@@ -29,7 +41,14 @@ Vec::Vec(const Vec &vec) : Vec(vec.getSize())
 
 Vec::~Vec()
 {
-    delete data;
+    if (!persistentMemory)
+        delete[] data;
+}
+
+void Vec::init(size_t n)
+{
+    this->n = n;
+    data = new double[n];
 }
 
 size_t Vec::getSize() const
@@ -110,6 +129,19 @@ double Vec::operator*(const Vec &vec) const
         rest += data[i] * vec.data[i];
     }
     return rest;
+}
+
+Vec &Vec::operator=(const Vec &vec)
+{
+    if (this != &vec)
+    {
+        delete[] data;
+        n = vec.getSize();
+        data = new double[n];
+        for (size_t i = 0; i < n; i++)
+            data[i] = vec[i];
+    }
+    return *this;
 }
 
 std::ostream &operator<<(std::ostream &os, const Vec &vec)

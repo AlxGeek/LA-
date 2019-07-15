@@ -8,9 +8,9 @@ Mat::Mat(size_t n) : Mat(n, n)
 {
 }
 
-Mat::Mat(size_t rows, size_t cols) : rows(rows), cols(cols)
+Mat::Mat(size_t rows, size_t cols)
 {
-    data = new double[rows * cols];
+    init(rows, cols);
 }
 
 Mat::Mat(size_t rows, size_t cols, double value) : Mat(rows, cols)
@@ -18,12 +18,35 @@ Mat::Mat(size_t rows, size_t cols, double value) : Mat(rows, cols)
     setValue(value);
 }
 
-Mat::~Mat()
+Mat::Mat(const Mat &mat) : Mat(mat.getRows(), mat.getCols())
 {
-    delete data;
+    copyData(mat);
 }
 
-void Mat::print(std::ostream &os) const
+Mat::~Mat()
+{
+    delete[] data;
+}
+
+void Mat::init(size_t rows, size_t cols)
+{
+    this->rows = rows;
+    this->cols = cols;
+    data = new double[rows * cols];
+}
+
+void Mat::copyData(const Mat &mat)
+{
+    for (size_t i = 0; i < rows; i++)
+    {
+        for (size_t j = 0; j < cols; j++)
+        {
+            data[j + i * cols] = mat[i][j];
+        }
+    }
+}
+
+std::ostream &Mat::print(std::ostream &os) const
 {
     for (size_t i = 0; i < rows; i++)
     {
@@ -33,6 +56,7 @@ void Mat::print(std::ostream &os) const
         }
         os << std::endl;
     }
+    return os;
 }
 
 size_t Mat::getRows() const
@@ -43,6 +67,11 @@ size_t Mat::getRows() const
 size_t Mat::getCols() const
 {
     return cols;
+}
+
+double *Mat::getData()
+{
+    return data;
 }
 
 void Mat::fillRandom(int maxValue)
@@ -70,6 +99,19 @@ void Mat::setValue(double value)
     {
         data[i] = value;
     }
+}
+
+Mat Mat::T() const
+{
+    Mat T(cols, rows);
+    for (size_t i = 0; i < rows; i++)
+    {
+        for (size_t j = 0; j < cols; j++)
+        {
+            T[j][i] = data[j + i * cols];
+        }
+    }
+    return T;
 }
 
 double &Mat::at(size_t i, size_t j)
@@ -102,6 +144,17 @@ Mat Mat::operator*(const Mat &mat) const
     return res;
 }
 
+Mat &Mat::operator=(const Mat &mat)
+{
+    if (this != &mat)
+    {
+        delete[] data;
+        init(mat.getRows(), mat.getCols());
+        copyData(mat);
+    }
+    return *this;
+}
+
 Mat Mat::getRandom(size_t rows, size_t cols, int maxValue)
 {
     Mat mat(rows, cols);
@@ -118,6 +171,5 @@ Mat Mat::getIdentity(size_t n)
 
 std::ostream &operator<<(std::ostream &os, const Mat &mat)
 {
-    mat.print(os);
-    return os;
+    return mat.print(os);
 }
